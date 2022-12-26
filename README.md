@@ -3,6 +3,9 @@ Radar is a SDR software which uses ambiguity function which is usually it is cal
 Please read how to get two dongles pdf included.
 
 Changes comparing to previous version:
+
 -Fixed bug with custom color map
--Corrected scales in Radar window, cod optimisation, improved graphical design
+
+-Corrected scales in Radar window, cod optimisation, improved graphical design with help of Alexander Borisenko <alessandro.borisenko@gmail.com>
+
 -Code cleaning (name clarification, replease SDRdue with PasiveRadar and so on)
