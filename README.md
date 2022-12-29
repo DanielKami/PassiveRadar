@@ -9,3 +9,15 @@ Changes comparing to previous version:
 -Corrected scales in Radar window, cod optimisation, improved graphical design with help of Alexander Borisenko 
 
 -Code cleaning (name clarification, replease SDRdue with PasiveRadar and so on)
+
+It can be sometimes necessary to unblock files:
+
+-WindowsRadio.resx and Form1.resx just go to the directory /PassiveRadar and right mouse click, chose settings and in the bottom right corner chose the box (see Change atributes 1.jpg and Change atributes 2.jpg)
+
+
+- the code is compiled for 64bit version. The Executable directory needs some files:
+- rtlsdr.dll
+- libusb-1.0.dll
+- Ambiguity.dll
+- ft.xnb
+- settings.ext (optionally) 
