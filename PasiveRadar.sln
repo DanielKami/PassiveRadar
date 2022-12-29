@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasiveRadar", "SDRdue\PasiveRadar.csproj", "{A09F3646-7BAD-4C47-B736-DFD61FDF6125}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasiveRadar", "PassiveRadar\PassiveRadar.csproj", "{A09F3646-7BAD-4C47-B736-DFD61FDF6125}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
