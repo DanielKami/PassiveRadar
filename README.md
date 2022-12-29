@@ -6,6 +6,6 @@ Changes comparing to previous version:
 
 -Fixed bug with custom color map
 
--Corrected scales in Radar window, cod optimisation, improved graphical design with help of Alexander Borisenko <alessandro.borisenko@gmail.com>
+-Corrected scales in Radar window, cod optimisation, improved graphical design with help of Alexander Borisenko 
 
 -Code cleaning (name clarification, replease SDRdue with PasiveRadar and so on)
