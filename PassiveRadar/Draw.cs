@@ -10,7 +10,7 @@ namespace PasiveRadar
         public static int RightMargin = 20;
         public int BottomMargin = 40;
         public int TopMargin = 20;
-        public int alpha = 255;
+        
 
         public int ColorThemeNr;
 
@@ -24,9 +24,15 @@ namespace PasiveRadar
 
         }
 
-        public void CreateColorTable1(int select, Color[] ColorThemeTable)
+        public void CreateColorTable1(int select, Color[] ColorThemeTable, Flags flags)
         {
             int i;
+            int alpha;
+
+            if (flags != null)
+                alpha = flags.alpha;
+            else
+                alpha = 255;
 
             Array.Copy(ColorThemeTable, CustomTable, ColorTableSize);
 
@@ -59,8 +65,9 @@ namespace PasiveRadar
 
                     break;
                 case 2: //User defined color
-                    Array.Copy(CustomTable, ColorTable,  ColorTableSize);
-
+                    //Array.Copy(CustomTable, ColorTable,  ColorTableSize);
+                    for (i = 0; i < ColorTable.Length; i++)
+                        ColorTable[i] = Color.FromNonPremultiplied(CustomTable[i].R, CustomTable[i].G, CustomTable[i].B, alpha);
                     break;
 
             }

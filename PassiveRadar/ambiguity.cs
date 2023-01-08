@@ -18,15 +18,14 @@ namespace PasiveRadar
         [System.Runtime.InteropServices.DllImport(@"Ambiguity.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern int Release();
 
-
+        private readonly Object LockMem = new Object();
         private Thread ThreadGPU;
 
         public void Prepare(Flags flags)
         {
-        
             short[] name = new short[Flags.MAX_DEVICE_NAME];
             //Name is a return string containing info about NVIDIA card
-            int err = Initialize(flags.BufferSize, flags.Columns, flags.Rows, (float)flags.DopplerZoom,  name);
+            int err = Initialize(flags.BufferSize, flags.Columns, flags.Rows, (float)flags.DopplerZoom, name);
 
             //copy the device name
             flags.DeviceName = "";
@@ -34,7 +33,6 @@ namespace PasiveRadar
                 if (name[i] > 32 && name[i] < 126)
                     flags.DeviceName += (char)name[i];
 
-            // MessageBox.Show(flags.DeviceName);
 
             if (err < 0)
             {
@@ -42,25 +40,22 @@ namespace PasiveRadar
                 MessageBox.Show(str);
                 StopGPU();
             }
-
         }
 
-        //     public void StartGPU(float[] In0, float[] In1, float[] Out, float amplification, float doppler_zoom, int shift, bool mode)
-        public void StartGPU(int[] In0, int[] In1, float[] Out, Flags flags)
+         public void StartGPU(int[] In0, int[] In1, float[] Out, Flags flags)
         {
             if (ThreadGPU == null) ThreadGPU = new Thread(() => ProcessGPU(In0, In1, Out, flags));
 
             if (ThreadGPU != null)
             {
                 ThreadGPU.Name = "Thread GPU";
-                ThreadGPU.Priority = System.Threading.ThreadPriority.AboveNormal;
+                ThreadGPU.Priority = System.Threading.ThreadPriority.Normal;
                 ThreadGPU.Start();
             }
         }
 
         public void StopGPU()
         {
-
             if (ThreadGPU != null)
             {
                 ThreadGPU.Join();//wait for thread termination
@@ -70,27 +65,35 @@ namespace PasiveRadar
 
         void ProcessGPU(int[] In0, int[] In1, float[] Out, Flags flags)
         {
-            // flags.PasiveGain, flags.DopplerZoom, flags.DistanceShift, flags.TwoDonglesMode
+            //flags.Columns * flags.rows + flags.Columns;
+            //The size can be different than dellared in buffer prepare, so it is better to set it constant
+            var dataRadar = new float[1000 * 1000 + 1000];
 
-            if (Out.Length >= flags.Columns * (flags.Rows + 1))
+            try
             {
-                int err = Run(In0, In1, Out, flags.PasiveGain, flags.DopplerZoom, flags.DistanceShift, flags.TwoDonglesMode, flags.scale_type, flags.remove_symetrics);
+                int err = Run(In0, In1, dataRadar, flags.PasiveGain, flags.DopplerZoom, flags.DistanceShift, flags.TwoDonglesMode, flags.scale_type, flags.remove_symetrics);
                 if (err < 0)
                 {
                     String str = "CUDA error. " + err;
-                    //for (int i = 1; i < 10; i++)
-                    //    str += Out[i];
                     MessageBox.Show(str);
                     return;
                 }
             }
-        }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
 
+            lock (LockMem)
+            {
+                //Array.Copy(dataRadar, Out, Out.Length);
+                System.Buffer.BlockCopy(dataRadar, 0, Out, 0, sizeof(float)*Out.Length);
+            }
+        }
 
 
         public void Release(Flags flags)
         {
-            // if (flags.AMDdriver)
             int err = Release();
             if (err < 0)
             {

@@ -65,6 +65,11 @@
             this.label21 = new System.Windows.Forms.Label();
             this.label22 = new System.Windows.Forms.Label();
             this.label23 = new System.Windows.Forms.Label();
+            this.label24 = new System.Windows.Forms.Label();
+            this.label_alpha = new System.Windows.Forms.Label();
+            this.trackBar_alpha = new System.Windows.Forms.TrackBar();
+            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.checkBoxFreeze = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar4)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).BeginInit();
@@ -75,6 +80,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar9)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_alpha)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
             this.SuspendLayout();
             // 
             // comboBox1
@@ -88,8 +95,7 @@
             "512k",
             "1024k",
             "2048k (critical)",
-            "4096k (critical)"
-            });
+            "4096k (critical)"});
             this.comboBox1.Location = new System.Drawing.Point(4, 350);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(4);
             this.comboBox1.Name = "comboBox1";
@@ -142,7 +148,7 @@
             this.trackBar4.LargeChange = 1;
             this.trackBar4.Location = new System.Drawing.Point(-4, 280);
             this.trackBar4.Margin = new System.Windows.Forms.Padding(4);
-            this.trackBar4.Maximum = 20;
+            this.trackBar4.Maximum = 40;
             this.trackBar4.Minimum = 1;
             this.trackBar4.Name = "trackBar4";
             this.trackBar4.Size = new System.Drawing.Size(222, 56);
@@ -155,7 +161,7 @@
             // checkBox4
             // 
             this.checkBox4.AutoSize = true;
-            this.checkBox4.Location = new System.Drawing.Point(7, 510);
+            this.checkBox4.Location = new System.Drawing.Point(7, 492);
             this.checkBox4.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox4.Name = "checkBox4";
             this.checkBox4.Size = new System.Drawing.Size(149, 20);
@@ -169,7 +175,7 @@
             this.trackBar3.LargeChange = 10;
             this.trackBar3.Location = new System.Drawing.Point(0, 210);
             this.trackBar3.Margin = new System.Windows.Forms.Padding(4);
-            this.trackBar3.Maximum = 5000;
+            this.trackBar3.Maximum = 10000;
             this.trackBar3.Minimum = 1;
             this.trackBar3.Name = "trackBar3";
             this.trackBar3.Size = new System.Drawing.Size(222, 56);
@@ -242,18 +248,19 @@
             // 
             // trackBar1
             // 
-            this.trackBar1.LargeChange = 1;
+            this.trackBar1.LargeChange = 2;
             this.trackBar1.Location = new System.Drawing.Point(-4, 397);
             this.trackBar1.Margin = new System.Windows.Forms.Padding(4);
             this.trackBar1.Maximum = 1000;
-            this.trackBar1.Minimum = 100;
+            this.trackBar1.Minimum = 101;
             this.trackBar1.Name = "trackBar1";
             this.trackBar1.Size = new System.Drawing.Size(222, 56);
             this.trackBar1.TabIndex = 70;
             this.trackBar1.TabStop = false;
             this.trackBar1.TickFrequency = 100;
-            this.trackBar1.Value = 200;
+            this.trackBar1.Value = 201;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
+            this.trackBar1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.trackBar1_MouseUp);
             // 
             // trackBar5
             // 
@@ -295,7 +302,7 @@
             this.trackBar6.LargeChange = 1;
             this.trackBar6.Location = new System.Drawing.Point(-4, 138);
             this.trackBar6.Margin = new System.Windows.Forms.Padding(4);
-            this.trackBar6.Maximum = 1000;
+            this.trackBar6.Maximum = 200;
             this.trackBar6.Name = "trackBar6";
             this.trackBar6.Size = new System.Drawing.Size(222, 56);
             this.trackBar6.TabIndex = 74;
@@ -318,7 +325,7 @@
             // checkBox3
             // 
             this.checkBox3.AutoSize = true;
-            this.checkBox3.Location = new System.Drawing.Point(7, 538);
+            this.checkBox3.Location = new System.Drawing.Point(7, 520);
             this.checkBox3.Margin = new System.Windows.Forms.Padding(4);
             this.checkBox3.Name = "checkBox3";
             this.checkBox3.Size = new System.Drawing.Size(151, 20);
@@ -509,10 +516,74 @@
             this.label23.TabIndex = 92;
             this.label23.Text = "log";
             // 
+            // label24
+            // 
+            this.label24.AutoSize = true;
+            this.label24.Location = new System.Drawing.Point(1, 901);
+            this.label24.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label24.Name = "label24";
+            this.label24.Size = new System.Drawing.Size(42, 16);
+            this.label24.TabIndex = 93;
+            this.label24.Text = "Alpha";
+            // 
+            // label_alpha
+            // 
+            this.label_alpha.AutoSize = true;
+            this.label_alpha.Location = new System.Drawing.Point(163, 901);
+            this.label_alpha.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label_alpha.Name = "label_alpha";
+            this.label_alpha.Size = new System.Drawing.Size(14, 16);
+            this.label_alpha.TabIndex = 94;
+            this.label_alpha.Text = "0";
+            // 
+            // trackBar_alpha
+            // 
+            this.trackBar_alpha.LargeChange = 1;
+            this.trackBar_alpha.Location = new System.Drawing.Point(0, 925);
+            this.trackBar_alpha.Margin = new System.Windows.Forms.Padding(4);
+            this.trackBar_alpha.Maximum = 255;
+            this.trackBar_alpha.Name = "trackBar_alpha";
+            this.trackBar_alpha.Size = new System.Drawing.Size(222, 56);
+            this.trackBar_alpha.TabIndex = 95;
+            this.trackBar_alpha.TabStop = false;
+            this.trackBar_alpha.TickFrequency = 50;
+            this.trackBar_alpha.Value = 100;
+            this.trackBar_alpha.Scroll += new System.EventHandler(this.trackBar_alpha_Scroll);
+            // 
+            // numericUpDown1
+            // 
+            this.numericUpDown1.Location = new System.Drawing.Point(150, 350);
+            this.numericUpDown1.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.numericUpDown1.Name = "numericUpDown1";
+            this.numericUpDown1.Size = new System.Drawing.Size(53, 22);
+            this.numericUpDown1.TabIndex = 96;
+            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged_1);
+            // 
+            // checkBoxFreeze
+            // 
+            this.checkBoxFreeze.AutoSize = true;
+            this.checkBoxFreeze.Location = new System.Drawing.Point(7, 548);
+            this.checkBoxFreeze.Margin = new System.Windows.Forms.Padding(4);
+            this.checkBoxFreeze.Name = "checkBoxFreeze";
+            this.checkBoxFreeze.Size = new System.Drawing.Size(150, 20);
+            this.checkBoxFreeze.TabIndex = 97;
+            this.checkBoxFreeze.Text = "Freeze backgroumd";
+            this.checkBoxFreeze.UseVisualStyleBackColor = true;
+            this.checkBoxFreeze.CheckedChanged += new System.EventHandler(this.checkBoxFreeze_CheckedChanged);
+            // 
             // RadarControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.checkBoxFreeze);
+            this.Controls.Add(this.numericUpDown1);
+            this.Controls.Add(this.trackBar_alpha);
+            this.Controls.Add(this.label_alpha);
+            this.Controls.Add(this.label24);
             this.Controls.Add(this.label23);
             this.Controls.Add(this.label22);
             this.Controls.Add(this.label21);
@@ -552,7 +623,8 @@
             this.Controls.Add(this.trackBar2);
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "RadarControl";
-            this.Size = new System.Drawing.Size(222, 913);
+            this.Size = new System.Drawing.Size(222, 981);
+            this.Load += new System.EventHandler(this.RadarControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar4)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar2)).EndInit();
@@ -563,6 +635,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar9)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_alpha)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -607,5 +681,10 @@
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label label23;
+        private System.Windows.Forms.Label label24;
+        private System.Windows.Forms.Label label_alpha;
+        private System.Windows.Forms.TrackBar trackBar_alpha;
+        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.CheckBox checkBoxFreeze;
     }
 }

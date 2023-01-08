@@ -223,7 +223,7 @@ namespace PasiveRadar
                 int r = flags.ColorThemeTable[i].R;
                 int g = flags.ColorThemeTable[i].G;
                 int b = flags.ColorThemeTable[i].B;
-                LocalColorTable[i] = Color.FromArgb(flags.alpha, r, g, b);
+                LocalColorTable[i] = Color.FromArgb(255, r, g, b);
             }
 
         }

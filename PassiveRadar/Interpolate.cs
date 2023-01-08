@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace PasiveRadar
@@ -29,17 +26,17 @@ namespace PasiveRadar
             Rows = flags.Rows;
             Lenght = Column * Rows;
 
-            StorageArray = new float[Lenght *( NrElements+1)];
+            StorageArray = new float[Lenght * (NrElements + 1)];
             BackgroundArray = new float[Lenght];
 
             //Mathematical preparation
 
             average_x = (NrElements + 1) / 2; //This is know since a step is always 1
             average_xx = average_x * average_x; //This is know since a step is always 1
-            
+
             f2 = 0;
-            for (uint i = 1; i < NrElements+1; i++)
-                f2 += i * i ;
+            for (uint i = 1; i < NrElements + 1; i++)
+                f2 += i * i;
             f2 /= NrElements;
             f2 = f2 - average_xx; // f2 Var(x)
 
@@ -52,11 +49,13 @@ namespace PasiveRadar
             //Add the new image to storage
             if (AddEveryIndex == AddEvery)
             {
-                //if(InpArray.Length>= StorageArray.Length)
-                Array.Copy(InpArray, 0, StorageArray, Lenght * Index, Lenght);
+                //  if (InpArray.Length < Lenght * Index + Lenght)
+                //     return;
+                //Array.Copy(InpArray, 0, StorageArray, Lenght * Index, Lenght);
+                System.Buffer.BlockCopy(InpArray, 0, StorageArray, (int)(sizeof(float)* Lenght * Index), (int)(sizeof(float) * Lenght));
                 AddEveryIndex = 0;
 
-                //Change the indexof added elements
+                //Change the index of added elements
                 Index++;
                 if (Index > NrElements)
                 {
@@ -68,23 +67,22 @@ namespace PasiveRadar
             }
             AddEveryIndex++;
 
-
-
         }
 
         private void LinearRegresion()
         {
-            
+
             Parallel.For(0, Lenght, new ParallelOptions { MaxDegreeOfParallelism = 12 }, Position =>
-            // for (uint Position = 0; Position < Lenght; Position++) //Scaning points in the picture
             {
                 float[] points = new float[NrElements];
                 for (uint Frame = 0; Frame < NrElements; Frame++) //Scaning pictures
                 {
                     points[Frame] = StorageArray[Position + Frame * Lenght];
                 }
+
                 float temp_pos = FindTheBestFit(points);
-                if (temp_pos > BackgroundArray[Position] * 2)//Skip the piks, only 2 * average value (pick filter) is allowed
+
+                if (temp_pos > BackgroundArray[Position] * 2)//Skip the peaks which are highet than 2 * average value (peack filter) is allowed
                     BackgroundArray[Position] = (BackgroundArray[Position] + temp_pos) / 2;
                 else
                     BackgroundArray[Position] = temp_pos;
@@ -94,17 +92,17 @@ namespace PasiveRadar
 
         private float FindTheBestFit(float[] Points)
         {
-            float average_y =0;
+            float average_y = 0;
 
             //y average
-            for (uint i = 0; i < NrElements; i++ )            
+            for (uint i = 0; i < NrElements; i++)
                 average_y += Points[i];
             average_y /= NrElements;
 
 
             float f1 = Points[0];
             for (uint i = 1; i < NrElements; i++)
-                f1 += (i+1) * Points[i];
+                f1 += (i + 1) * Points[i];
             f1 /= NrElements;
             f1 -= average_x * average_y; //Cov(x,y)
 
@@ -117,7 +115,7 @@ namespace PasiveRadar
             // average_y - f1 / f2 * average_x + NrElements * f1 / f2
             //average_y + f1 / f2*(NrElements-average_x)
             // average_y + f1  * n_AvXf2
-            return (average_y + f1  * n_AvXf2);
+            return (average_y + f1 * n_AvXf2);
 
         }
 
@@ -130,11 +128,11 @@ namespace PasiveRadar
             }
         }
 
-        public void Background(float[] input, float Weight)
+        public void Background(float[] input, Flags flags)
         {
             for (uint Position = 0; Position < Lenght; Position++) //Scaning points in the picture
             {
-                input[Position] = BackgroundArray[Position] * Weight;
+                input[Position] = BackgroundArray[Position] * flags.CorectionWeight;
                 if (input[Position] < 0) input[Position] = 0;
             }
         }

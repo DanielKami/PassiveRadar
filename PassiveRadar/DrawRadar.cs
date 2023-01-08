@@ -78,7 +78,7 @@ namespace PasiveRadar
                     doppler_zoom = flags.DopplerZoom;
                     DistanceShift = flags.DistanceShift;
                     BufferSize = flags.BufferSize;
-                    CreateColorTable1(ColorThemeNr, flags.ColorThemeTable);
+                    CreateColorTable1(ColorThemeNr, flags.ColorThemeTable, flags);
                     frequency = flags.frequency[0];
                     sample_rate = flags.rate[0];
                 }
@@ -131,7 +131,7 @@ namespace PasiveRadar
                 scaleYfactor = row_to_km / zoomY;
 
             }
-    
+
         }
 
         public void Scene(Panel panelViewport, float[] data)
@@ -156,24 +156,12 @@ namespace PasiveRadar
                 {
                     col = (int)(data[i]);
 
-                    if (col >= ColorTableSize_)
+                    if (col > ColorTableSize_)
                         col = ColorTableSize_;
                     if (col > 0)
                         graphisc.Point(p[i], ColorTable[col]);
                 }
             }
-
-            ////test
-
-            //for (uint i = 0; i < ColRow; i++)
-            //{
-            //    col = (int)(i/10);
-
-            //    if (col >= ColorTableSize_)
-            //        col = ColorTableSize_;
-
-            //        graphisc.Point(p[i], ColorTable[col]);
-            //}
 
             this.spriteBatch.Draw(texture, new Rectangle(0, y_bottom, panelViewport.Width, 1), Color.White);
             string drawString;
@@ -189,7 +177,7 @@ namespace PasiveRadar
             spriteBatch.End();
             spriteBatch.Begin();
             ScaleX(panelViewport.Width, panelViewport.Height);
- 
+
             ScaleY(panelViewport.Width, panelViewport.Height);
             spriteBatch.End();
 
@@ -216,7 +204,7 @@ namespace PasiveRadar
         {
             string drawString;
             float x, y;
-            float ScaleValue, AbsScale ;
+            float ScaleValue, AbsScale;
             y = y_bottom;
 
             for (float i = 0; i <= ActivePlotAreaX; i += x_step)
@@ -225,14 +213,14 @@ namespace PasiveRadar
                 this.spriteBatch.Draw(texture, new Rectangle((int)x, (int)TopMargin, 1, y_bottom - (int)TopMargin), Color.FromNonPremultiplied(200, 1, 1, 60));
                 ScaleValue = (x - center) * r_b_c;
                 AbsScale = Math.Abs(ScaleValue);
-                    if (AbsScale > 10)
-                        drawString = "" + ScaleValue.ToString("0"); // Doppler speed
+                if (AbsScale > 10)
+                    drawString = "" + ScaleValue.ToString("0"); // Doppler speed
                 else if (AbsScale > 0.01f)
-                        drawString = "" + ScaleValue.ToString("0.0"); // Doppler speed
-                    else
-                        drawString = "" + ScaleValue.ToString("0.00"); // Doppler speed
-                
-                
+                    drawString = "" + ScaleValue.ToString("0.0"); // Doppler speed
+                else
+                    drawString = "" + ScaleValue.ToString("0.00"); // Doppler speed
+
+
 
 
                 float lt = spriteFont.MeasureString(drawString).Length() / 9;

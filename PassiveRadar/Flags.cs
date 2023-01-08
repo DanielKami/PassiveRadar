@@ -66,7 +66,7 @@ namespace PasiveRadar
         public bool remove_symetrics = false;                         //Flag indicate if the symetric signals in radar has to be removed
         public int average = 5;                                 //Average Radar frames over specified number
         public short scale_type = 0;                            //sygnal scale in radar 0-lin, 1-sqrt, 2-log
-        public uint MaxAverage = 20;                            //Maximum frame average for radar
+        public uint MaxAverage = 40;                            //Maximum frame average for radar
         public uint DopplerZoom = 500;                          //Distance zoom in pasive radar
         public float PasiveGain = 5;                            //Gain of the ambiguity function
         public uint Columns = 100;                              //Screen columns
@@ -75,6 +75,8 @@ namespace PasiveRadar
         public bool OpenCL = false;                             //Turn on/off openCL calculations
         public int DistanceShift = 0;                           //Task divider between GPU and CPU for rows calculations in ambiguity function. CPU task is CPU_GPU_task_ratio and GPU is 1.0-CPU_GPU_task_ratio
         public bool CorrectBackground = false;                  //Correct radar background
+        public bool FreezeBackground = false;                    //Freze the recorded background with out updating it
+
         public int NrCorrectionPoints = 10;                     //Nr of points used for correction in regresion
         public int ColectEvery = 10;                            //Colect correction points every .... points
         public float CorectionWeight = 0.5f;                    //Corection weight

@@ -61,7 +61,7 @@ namespace PasiveRadar
 
             HeightBootom = panelViewport.Height - BottomMargin;
             WithRight = panelViewport.Width - RightMargin;
-            CreateColorTable1(ColorThemeNr, UserColorTable);
+            CreateColorTable1(ColorThemeNr, UserColorTable, null);
 
             //Find how menny MHz is one pixel
             MHz_perPixel = (float)(ActivePlotAreaX / (rate / 1000000));

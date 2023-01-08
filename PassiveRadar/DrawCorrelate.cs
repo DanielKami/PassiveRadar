@@ -136,7 +136,7 @@ namespace PasiveRadar
                 Positive = flags.Positive;
                 Negative = flags.Negative;
 
-                CreateColorTable1(ColorThemeNr, flags.ColorThemeTable);
+                CreateColorTable1(ColorThemeNr, flags.ColorThemeTable, flags);
             }
             
             NegPos = Positive + Negative;

@@ -112,7 +112,7 @@ namespace PasiveRadar
                 if (AcceptanceFeilCount > MaxAcceptanceFeilCount)
                 {
                     //resynchronise dongles
-                    Resynchronise?.Invoke();
+                    Resynchronise.Invoke();
                     AcceptanceFeilCount = 0;
                 }
                 return false;

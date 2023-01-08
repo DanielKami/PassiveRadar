@@ -47,7 +47,7 @@ namespace PasiveRadar
             flags.AMDdriver = FindAMD();//Detect AMD video driver
 
 
-            trackBarVolume.Value = flags.volume;
+
             ButtonFreqEqual(); //Set the correct icone and values for frequency
             RadarMode();
 
@@ -134,6 +134,8 @@ namespace PasiveRadar
             RadarControl.RadarSettings += new RadarControl.MyDelegate(RadarSettings);
             CorrelateControl.EventSettings += new CorrelateControl.MyDelegate(CorrelationSettings);
 
+
+
             ///Radio data ready
             Settings.EventRadio += new Settings.MyDelegate(AddRadio);
 
@@ -214,7 +216,7 @@ namespace PasiveRadar
                 flags.ColorThemeTable[i].R = col[i].R;
                 flags.ColorThemeTable[i].G = col[i].G;
                 flags.ColorThemeTable[i].B = col[i].B;
-                flags.ColorThemeTable[i].A = flags.alpha;
+                flags.ColorThemeTable[i].A = 255;
             }
             //WindowsUpdate();
             windowRadar.Update(flags);
@@ -304,9 +306,8 @@ namespace PasiveRadar
 
         private void InitBuffers()
         {
-            lock (LockMem)
+            //lock (LockMem)
             {
-
                 for (int i = 0; i < Flags.MAX_DONGLES; i++)
                 {
                     if (radio[i] != null)
@@ -327,13 +328,15 @@ namespace PasiveRadar
 
 
                 radar_cumulate.Init(flags);
-                // uint BufferNegPos = flags.BufferSize + flags.Negative + flags.Positive;
+                //uint BufferNegPos = flags.BufferSize + (flags.Negative + flags.Positive) * 2;
                 uint BufferNegPos = flags.BufferSize + (50000 + 50000) * 2;
+              
                 dataOutRadio0 = new int[BufferNegPos];
                 dataOutRadio1 = new int[BufferNegPos];
 
                 PostProc = new float[flags.Columns * flags.Rows];
-                ambiguity.Release(flags); //OpenCL clear
+                
+                ambiguity.Release(flags);  
                 ambiguity.Prepare(flags);
                 Regresion.Initiate(flags);
             }
@@ -352,6 +355,10 @@ namespace PasiveRadar
             if (find.NrOfDevices == 0) return;
             if (runing == false)
             {
+                radarControl1.ActiveDeactivateColumnsControll(false);
+                //init buffers just in case
+                InitBuffers();
+ 
                 if (CheckTheCorrelationRadarRate())
                 {
                     runing = true;
@@ -363,10 +370,10 @@ namespace PasiveRadar
             else
             {
                 if (find.NrOfDevices == 0) return;
+                radarControl1.ActiveDeactivateColumnsControll(true);
                 StopAllThreads();
                 StopAllRadios();
                 button1.ImageIndex = 0;
-
                 runing = false;
             }
         }
@@ -629,13 +636,6 @@ namespace PasiveRadar
             flags.Radio_buffer_size = LocalFlags.Radio_buffer_size;
             displayControl1.UpdateTable(flags);
 
-            for (int i = 0; i < Flags.MAX_DONGLES; i++)
-            {
-                //flags.Amplification[i] = LocalFlags.Amplification[i];
-                //flags.Cumulation[i] = LocalFlags.Cumulation[i];
-                //flags.Level[i] = LocalFlags.Level[i];
-                // CheckTheCorrelationRadarRate();
-            }
 
             WindowsUpdate();
         }
@@ -665,60 +665,52 @@ namespace PasiveRadar
         /// <param name="LocalFlags"></param>
         private void RadarSettings(Flags LocalFlags)
         {
-            lock (LockMem)
+           // lock (LockMem)
             {
-                if (runing == true)
+                flags.PasiveGain = LocalFlags.PasiveGain;
+                flags.remove_symetrics = LocalFlags.remove_symetrics;
+                flags.average = LocalFlags.average;
+                flags.CorrectBackground = LocalFlags.CorrectBackground;
+                flags.ColectEvery = LocalFlags.ColectEvery;
+                flags.CorectionWeight = LocalFlags.CorectionWeight;
+                flags.DistanceShift = LocalFlags.DistanceShift;
+                flags.FreezeBackground = LocalFlags.FreezeBackground;
+                flags.DopplerZoom = LocalFlags.DopplerZoom;
+                flags.NrCorrectionPoints = LocalFlags.NrCorrectionPoints;
+                flags.scale_type = LocalFlags.scale_type;
+                flags.alpha = LocalFlags.alpha;
+
+
+                if (runing == true)  //on running
                 {
+
                     if (flags.BufferSize != LocalFlags.BufferSize ||
                         flags.Columns != LocalFlags.Columns ||
                         flags.Rows != LocalFlags.Rows ||
-                        flags.TwoDonglesMode != LocalFlags.TwoDonglesMode ||
-                        flags.OpenCL != LocalFlags.OpenCL ||
+                        flags.TwoDonglesMode != LocalFlags.TwoDonglesMode ||                        
                         flags.NrCorrectionPoints != LocalFlags.NrCorrectionPoints
                         )
                     {
                         StopDraw();
                         radio[0].Stop();
                         radio[1].Stop();
+
                         flags.Columns = LocalFlags.Columns;
                         flags.Rows = LocalFlags.Rows;
-                        flags.OpenCL = LocalFlags.OpenCL;
                         flags.TwoDonglesMode = LocalFlags.TwoDonglesMode;
                         flags.NrCorrectionPoints = LocalFlags.NrCorrectionPoints;
-
                         flags.BufferSize = LocalFlags.BufferSize;
+
                         InitBuffers();
 
                         radio[0].Start();
                         radio[1].Start();
                         StartDraw();
                     }
-                    flags.DistanceShift = LocalFlags.DistanceShift;
-                    flags.PasiveGain = LocalFlags.PasiveGain;
-                    flags.DopplerZoom = LocalFlags.DopplerZoom;
-                    flags.remove_symetrics = LocalFlags.remove_symetrics;
-                    flags.average = LocalFlags.average;
-                    flags.CorrectBackground = LocalFlags.CorrectBackground;
-                    flags.ColectEvery = LocalFlags.ColectEvery;
-                    flags.CorectionWeight = LocalFlags.CorectionWeight;
-                    flags.NrCorrectionPoints = LocalFlags.NrCorrectionPoints;
-                    flags.scale_type = LocalFlags.scale_type;
+
                 }
                 else
                 {
-                    StopAllThreads();
-                    radio[0].Stop();
-                    radio[1].Stop();
-
-                    flags.PasiveGain = LocalFlags.PasiveGain;
-                    flags.remove_symetrics = LocalFlags.remove_symetrics;
-                    flags.average = LocalFlags.average;
-                    flags.CorrectBackground = LocalFlags.CorrectBackground;
-                    flags.ColectEvery = LocalFlags.ColectEvery;
-                    flags.CorectionWeight = LocalFlags.CorectionWeight;
-                    flags.DistanceShift = LocalFlags.DistanceShift;
-                    //flags.NrCorrectionPoints = LocalFlags.NrCorrectionPoints;
-
                     if (flags.BufferSize != LocalFlags.BufferSize ||
                         flags.Columns != LocalFlags.Columns ||
                         flags.Rows != LocalFlags.Rows ||
@@ -727,10 +719,13 @@ namespace PasiveRadar
                         flags.OpenCL != LocalFlags.OpenCL ||
                         flags.NrCorrectionPoints != LocalFlags.NrCorrectionPoints)
                     {
+                        StopAllThreads();
+                        radio[0].Stop();
+                        radio[1].Stop();
+
                         flags.Columns = LocalFlags.Columns;
                         flags.Rows = LocalFlags.Rows;
-                        flags.DopplerZoom = LocalFlags.DopplerZoom;
-                        flags.OpenCL = LocalFlags.OpenCL;
+                        flags.DopplerZoom = LocalFlags.DopplerZoom;           
                         flags.TwoDonglesMode = LocalFlags.TwoDonglesMode;
                         flags.NrCorrectionPoints = LocalFlags.NrCorrectionPoints;
                         flags.scale_type = LocalFlags.scale_type;
@@ -940,6 +935,7 @@ namespace PasiveRadar
                     if (i != Nr) flags.frequency[i] = flags.frequency[Nr];
                     rd[i].tuningNumber.frequency = (int)flags.frequency[Nr];
                     rd[i].tuningNumber.Update_(false);
+                    radio[Nr].SetSampleRate((uint)flags.rate[Nr]);
                 }
                 // flags.rate[1] =  rd[1].rate = rd[0].rate;
 
@@ -971,7 +967,7 @@ namespace PasiveRadar
             windowBackground.Update(flags);
             windowCorrelateWave.Update(flags);
             windowCorrelateFlow.Update(flags);
-            
+
 
             if (FlagsDelegate != null)
                 FlagsDelegate(flags);
@@ -988,7 +984,7 @@ namespace PasiveRadar
 
         private void trackBar5_Scroll(object sender, EventArgs e)
         {
-            flags.volume = trackBarVolume.Value;
+
         }
 
 
@@ -1135,6 +1131,7 @@ namespace PasiveRadar
             {
                 buttonFrequencyEqual.ImageIndex = 0;
                 flags.FREQUENCY_EQUAL = true;
+                flags.rate[1] = flags.rate[0];
             }
             else
             {

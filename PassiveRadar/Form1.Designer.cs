@@ -50,7 +50,6 @@
             this.panelViewport2 = new System.Windows.Forms.Panel();
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.label51 = new System.Windows.Forms.Label();
-            this.trackBarVolume = new System.Windows.Forms.TrackBar();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
@@ -77,7 +76,6 @@
             this.splitContainer4.Panel1.SuspendLayout();
             this.splitContainer4.Panel2.SuspendLayout();
             this.splitContainer4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -171,7 +169,7 @@
             this.radarControl1.Location = new System.Drawing.Point(5, 389);
             this.radarControl1.Margin = new System.Windows.Forms.Padding(5);
             this.radarControl1.Name = "radarControl1";
-            this.radarControl1.Size = new System.Drawing.Size(254, 882);
+            this.radarControl1.Size = new System.Drawing.Size(254, 979);
             this.radarControl1.TabIndex = 60;
             this.radarControl1.Load += new System.EventHandler(this.radarControl1_Load);
             // 
@@ -183,7 +181,7 @@
             this.button9.ForeColor = System.Drawing.SystemColors.ControlLightLight;
             this.button9.ImageIndex = 0;
             this.button9.ImageList = this.imageList2;
-            this.button9.Location = new System.Drawing.Point(0, 1276);
+            this.button9.Location = new System.Drawing.Point(0, 1373);
             this.button9.Margin = new System.Windows.Forms.Padding(0);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(225, 30);
@@ -194,7 +192,7 @@
             // 
             // correlateControl1
             // 
-            this.correlateControl1.Location = new System.Drawing.Point(5, 1311);
+            this.correlateControl1.Location = new System.Drawing.Point(5, 1408);
             this.correlateControl1.Margin = new System.Windows.Forms.Padding(5);
             this.correlateControl1.Name = "correlateControl1";
             this.correlateControl1.Size = new System.Drawing.Size(223, 362);
@@ -349,18 +347,6 @@
             this.label51.Size = new System.Drawing.Size(0, 16);
             this.label51.TabIndex = 88;
             // 
-            // trackBarVolume
-            // 
-            this.trackBarVolume.Location = new System.Drawing.Point(309, 9);
-            this.trackBarVolume.Margin = new System.Windows.Forms.Padding(4);
-            this.trackBarVolume.Maximum = 100;
-            this.trackBarVolume.Name = "trackBarVolume";
-            this.trackBarVolume.Size = new System.Drawing.Size(177, 56);
-            this.trackBarVolume.TabIndex = 89;
-            this.trackBarVolume.TickFrequency = 10;
-            this.trackBarVolume.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBarVolume.Scroll += new System.EventHandler(this.trackBar5_Scroll);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.label3);
@@ -368,7 +354,6 @@
             this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.buttonFrequencyEqual);
-            this.groupBox1.Controls.Add(this.trackBarVolume);
             this.groupBox1.Controls.Add(this.label51);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -450,10 +435,10 @@
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.ImageIndex = 0;
             this.button1.ImageList = this.imageList1;
-            this.button1.Location = new System.Drawing.Point(259, 15);
+            this.button1.Location = new System.Drawing.Point(259, 13);
             this.button1.Margin = new System.Windows.Forms.Padding(4);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(43, 37);
+            this.button1.Size = new System.Drawing.Size(63, 52);
             this.button1.TabIndex = 27;
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.buttonStart_Click);
@@ -496,7 +481,6 @@
             this.splitContainer4.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer4)).EndInit();
             this.splitContainer4.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.trackBarVolume)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.ResumeLayout(false);
@@ -517,7 +501,6 @@
         private DisplayControl displayControl1;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label51;
-        private System.Windows.Forms.TrackBar trackBarVolume;
   
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Button button7;

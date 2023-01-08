@@ -20,6 +20,7 @@ namespace PasiveRadar
         public AutoResetEvent DrawEvent2 = new AutoResetEvent(false);
         public AutoResetEvent DrawEvent = new AutoResetEvent(false);
 
+
         private bool resizing;
 
         WindowWave[] window_wave;
@@ -96,7 +97,7 @@ namespace PasiveRadar
 
             DataIn = new Complex[Flags.MAX_DONGLES][];
             for (int i = 0; i < Flags.MAX_DONGLES; i++)
-                DataIn[i] = new Complex[flags.BufferSizeRadio[i] ];//+ flags.Negative + flags.Positive
+                DataIn[i] = new Complex[flags.BufferSizeRadio[i]];//+ flags.Negative + flags.Positive
 
             DataOut = new Complex[Flags.MAX_DONGLES][];
             for (int i = 0; i < Flags.MAX_DONGLES; i++)
@@ -169,17 +170,22 @@ namespace PasiveRadar
 
         private void CalculateRadarScene()
         {
-            uint CorrelationShift = 0;    
+            uint CorrelationShift = 0;
             float[] DataCorrelate = new float[flags.BufferSize + flags.Negative + flags.Positive];
             correlate.Init(flags.BufferSize);
+
+
 
             while (!calculate_radar_exit)
             {
                 if (runing)
                 {
-                        //Copy
+                    //Copy
                     lock (LockRadar)
                     {
+                        if (flags.BufferSize > dataOutRadio0.Length || flags.BufferSize > dataOutRadio1.Length)
+                            return;
+
                         if (radio[0] != null)
                             for (int i = 0; i < flags.BufferSize; i++)
                                 dataOutRadio0[i] = radio[0].dataIQ[i] - 128;
@@ -196,18 +202,18 @@ namespace PasiveRadar
 
 
                     //Calculate ambiguity map extremally slow 10x
-                    if (flags.showRadar0 )
+                    if (flags.showRadar0 & runing)
                         try
-                    {
-                        ambiguity.StartGPU(dataOutRadio0, dataOutRadio1, dataRadar, flags);
-                        ambiguity.StopGPU();
-                    }
-                    catch (Exception ex)
-                    {
-                        String str = "Error ambiguity function. " + ex.ToString();
-                        MessageBox.Show(str);
-                        break;
-                    }
+                        {
+                            ambiguity.StartGPU(dataOutRadio0, dataOutRadio1, dataRadar, flags);
+                            ambiguity.StopGPU();
+                        }
+                        catch (Exception ex)
+                        {
+                            String str = "Error ambiguity function. " + ex.ToString();
+                            MessageBox.Show(str);
+                            break;
+                        }
 
                     //Average maps
                     if (flags.showRadar0)
@@ -215,7 +221,8 @@ namespace PasiveRadar
 
                     if (flags.CorrectBackground)
                     {
-                        Regresion.Add(PostProc, flags.ColectEvery); //Add frames for regresion fit to find the best background correction, the second parameter describe how othen to add the element
+                        if (!flags.FreezeBackground)
+                            Regresion.Add(PostProc, flags.ColectEvery); //Add frames for regresion fit to find the best background correction, the second parameter describe how othen to add the element
                         Regresion.CorrectBackground(PostProc, flags.CorectionWeight);
                     }
 
@@ -223,7 +230,7 @@ namespace PasiveRadar
                     if (flags.showRadar0)
                         windowRadar.RenderRadar(PostProc);
 
- 
+
                     //Correlate
                     if (flags.showCorrelateWave0)
                     {
@@ -239,7 +246,7 @@ namespace PasiveRadar
                     //Draw scene  radar background
                     if (flags.showBackground)
                     {
-                        Regresion.Background(PostProc, flags.CorectionWeight);
+                        Regresion.Background(PostProc, flags);
                         windowBackground.RenderRadar(PostProc);
                     }
                 }

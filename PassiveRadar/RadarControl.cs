@@ -36,8 +36,15 @@ namespace PasiveRadar
             LocalFlags.CorectionWeight = flags.CorectionWeight;
             LocalFlags.AMDdriver = flags.AMDdriver;
             LocalFlags.TwoDonglesMode = flags.TwoDonglesMode;
-            LocalFlags.scale_type= flags.scale_type;
+            LocalFlags.scale_type = flags.scale_type;
             LocalFlags.Nr_active_radio = flags.Nr_active_radio;
+            LocalFlags.alpha = flags.alpha;
+            LocalFlags.MaxAverage = flags.MaxAverage; //has to be the same as arrays size
+            LocalFlags.FreezeBackground = flags.FreezeBackground; //has to be the same as arrays size
+            
+
+
+            trackBar4.Maximum = (int)LocalFlags.MaxAverage;
 
             if (LocalFlags.BufferSize == 1024 * 32) comboBox1.SelectedIndex = 0;
             if (LocalFlags.BufferSize == 1024 * 64) comboBox1.SelectedIndex = 1;
@@ -57,6 +64,7 @@ namespace PasiveRadar
             trackBar8.Value = LocalFlags.ColectEvery;
             trackBar9.Value = (int)(LocalFlags.CorectionWeight * 100);
             trackBar10.Value = (int)LocalFlags.scale_type;
+            trackBar_alpha.Value = LocalFlags.alpha;
 
             checkBox4.Checked = LocalFlags.remove_symetrics;
             checkBox3.Checked = LocalFlags.CorrectBackground;
@@ -69,8 +77,10 @@ namespace PasiveRadar
             label15.Text = "" + LocalFlags.NrCorrectionPoints;
             label17.Text = "" + LocalFlags.ColectEvery;
             label19.Text = "" + LocalFlags.CorectionWeight;
+            label_alpha.Text = "" + LocalFlags.alpha;
 
             trackBar1.Value = (int)LocalFlags.Columns;
+
 
             label11.Text = "" + LocalFlags.Columns;
             label12.Text = "" + trackBar5.Value;// LocalFlags.Rows;
@@ -89,6 +99,10 @@ namespace PasiveRadar
 
         }
 
+        public void ActiveDeactivateColumnsControll(bool state)
+        {
+           // trackBar1.Enabled = state;
+        }
         private void SetActiveInactiveControls(Flags LocalFlags)
         {
 
@@ -117,18 +131,21 @@ namespace PasiveRadar
             Flags LocalFlags = new Flags();
 
             LocalFlags.BufferSize = BufferSize;
-            LocalFlags.PasiveGain = 0.1f*trackBar2.Value;
+            LocalFlags.PasiveGain = 0.1f * trackBar2.Value;
             LocalFlags.DopplerZoom = (uint)trackBar3.Value;
             LocalFlags.average = trackBar4.Value;
             LocalFlags.remove_symetrics = checkBox4.Checked;
             LocalFlags.DistanceShift = trackBar6.Value;
-            LocalFlags.CorrectBackground= checkBox3.Checked ;
+            LocalFlags.CorrectBackground = checkBox3.Checked;
             LocalFlags.NrCorrectionPoints = trackBar7.Value;
             LocalFlags.ColectEvery = trackBar8.Value;
-            LocalFlags.CorectionWeight = 0.01f *trackBar9.Value;
+            LocalFlags.CorectionWeight = 0.01f * trackBar9.Value;
             LocalFlags.scale_type = (short)trackBar10.Value;
-            LocalFlags.TwoDonglesMode= checkBox1.Checked;
+            LocalFlags.TwoDonglesMode = checkBox1.Checked;
+            LocalFlags.alpha = (byte)trackBar_alpha.Value;
+            LocalFlags.FreezeBackground = checkBoxFreeze.Checked;
 
+             
             label1.Text = "" + LocalFlags.PasiveGain;
             label2.Text = "" + LocalFlags.DopplerZoom;
             label7.Text = "" + LocalFlags.average;
@@ -136,9 +153,12 @@ namespace PasiveRadar
             label15.Text = "" + LocalFlags.NrCorrectionPoints;
             label17.Text = "" + LocalFlags.ColectEvery;
             label19.Text = "" + LocalFlags.CorectionWeight;
+            label_alpha.Text = "" + LocalFlags.alpha;
 
             LocalFlags.Columns = (uint)trackBar1.Value;
-           // trackBar5.Minimum = (int)LocalFlags.Columns;
+
+
+            // trackBar5.Minimum = (int)LocalFlags.Columns;
             LocalFlags.Rows = (uint)trackBar5.Value;
 
             label11.Text = "" + LocalFlags.Columns;
@@ -193,7 +213,25 @@ namespace PasiveRadar
 
         private void trackBar1_Scroll(object sender, EventArgs e)
         {
+            int temp_6value = trackBar6.Value;
+            trackBar6.Value = 0;
+            trackBar6.Maximum = trackBar1.Value - 1;
+
+            if (trackBar6.Maximum < trackBar1.Value - 1)
+            {
+                trackBar6.Maximum = trackBar1.Value - 1;
+            }
+
+            if (trackBar6.Value > trackBar1.Value - 1)
+                trackBar6.Value = trackBar6.Maximum;
+            else
+                trackBar6.Value =temp_6value ;
+
+
+
             SendSettings();//columns
+
+
         }
 
         private void trackBar5_Scroll(object sender, EventArgs e)
@@ -249,6 +287,32 @@ namespace PasiveRadar
         private void trackBar10_Scroll(object sender, EventArgs e)
         {
             SendSettings();//nr corection points
+        }
+
+        private void trackBar_alpha_Scroll(object sender, EventArgs e)
+        {
+            SendSettings();//colection weighht
+        }
+
+        private void RadarControl_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar1_MouseUp(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void numericUpDown1_ValueChanged_1(object sender, EventArgs e)
+        {
+
+
+        }
+
+        private void checkBoxFreeze_CheckedChanged(object sender, EventArgs e)
+        {
+            SendSettings();
         }
     }
 }

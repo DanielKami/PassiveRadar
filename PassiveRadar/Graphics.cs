@@ -27,7 +27,7 @@ namespace PasiveRadar
             
         }
         public void Point(Vector2 p, Color col)
-        {         
+        {             
             spriteBatch.Draw(texture, p, null, col, 0,  new Vector2(0, 0), zoom, SpriteEffects.None, 0);
         }
         public void Pixel(Vector2 p, Color col)
