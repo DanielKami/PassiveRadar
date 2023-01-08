@@ -49,7 +49,7 @@ namespace PasiveRadar
         {
             //Draw radar only the scale and crosses
             if (flags.showRadar0)
-                windowRadar.RenderRadar(PostProc);
+                windowRadar.RenderRadar(PostProc, true);
 
             calculate_draw_data_exit = false;
             calculate_draw_data_exited = false;
@@ -228,7 +228,7 @@ namespace PasiveRadar
 
                     //Draw radar
                     if (flags.showRadar0)
-                        windowRadar.RenderRadar(PostProc);
+                        windowRadar.RenderRadar(PostProc, true);
 
 
                     //Correlate
@@ -247,7 +247,7 @@ namespace PasiveRadar
                     if (flags.showBackground)
                     {
                         Regresion.Background(PostProc, flags);
-                        windowBackground.RenderRadar(PostProc);
+                        windowBackground.RenderRadar(PostProc, false);
                     }
                 }
                 else

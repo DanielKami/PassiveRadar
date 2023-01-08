@@ -86,7 +86,6 @@ namespace PasiveRadar
 
             lock (LockMem)
             {
-                //Array.Copy(dataRadar, Out, Out.Length);
                 System.Buffer.BlockCopy(dataRadar, 0, Out, 0, sizeof(float)*Out.Length);
             }
         }

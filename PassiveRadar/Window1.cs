@@ -114,12 +114,12 @@ namespace PasiveRadar
         }
 
         //Start rander the scene
-        public void RenderRadar(float[] data)
+        public void RenderRadar(float[] data, bool DrawScale)
         {
             if (resizing) return;
 
             if (this.service.GraphicsDevice != null)
-                mDrawRadar.Scene(panelViewport, data);
+                mDrawRadar.Scene(panelViewport, data, DrawScale);
 
             try
             {
