@@ -306,7 +306,7 @@ namespace PasiveRadar
 
         private void InitBuffers()
         {
-            //lock (LockMem)
+            lock (LockMem)
             {
                 for (int i = 0; i < Flags.MAX_DONGLES; i++)
                 {

@@ -98,7 +98,7 @@ namespace PasiveRadar
                 x_step = ActivePlotAreaX / x_ticks;
 
                 // This is the Doppler shift change between ticks according to Max Manning dopplerfish.com
-                r_b_c = (float)(sample_rate / Columns / ActivePlotAreaX / (doppler_zoom/100) * c / frequency / 2.0f); // TODO: / doppler_zoom;
+                r_b_c = (float)(sample_rate / Columns / ActivePlotAreaX / (doppler_zoom/100) * c / frequency / 4.0f); // TODO: / doppler_zoom;
                 ColRow = Columns * Rows;
 
                 p = new Vector2[ColRow];
@@ -125,7 +125,7 @@ namespace PasiveRadar
                 // Scale Y
                 Up = ActivePlotAreaY;
                 step_y = ActivePlotAreaY / y_ticks;
-                float row_to_km = c / 1000 / sample_rate;
+                float row_to_km = c / 1000 / sample_rate/2;//divided by 2 because the signal is in format real bit + imaginary part bit
                 Yscale_shift = DistanceShift * row_to_km;
 
                 scaleYfactor = row_to_km / zoomY;
