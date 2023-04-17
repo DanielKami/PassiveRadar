@@ -10,9 +10,9 @@ Changes comparing to previous version:
 
 -Code cleaning (name clarification, replease SDRdue with PasiveRadar and so on)
 
-It can be sometimes necessary to unblock files:
 
--WindowsRadio.resx and Form1.resx just go to the directory /PassiveRadar and right mouse click, chose settings and in the bottom right corner chose the box (see Change atributes 1.jpg and Change atributes 2.jpg)
+Compilation:
+The program should be started as a 64bits and Release. The Debug can be also run but before that, all the file from Release should be cpied to the Debug directory.
 
 
 - the code is compiled for 64bit version. The Executable directory needs some files:
