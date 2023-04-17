@@ -21,3 +21,10 @@ It can be sometimes necessary to unblock files:
 - Ambiguity.dll
 - ft.xnb
 - settings.ext (optionally) 
+
+Two file needs unblocking:
+-Form1.resx
+-RadarControl.resx
+
+do it in windows explorer, go to properties and than in protection section remove the blocking
+see: https://learn.microsoft.com/pl-pl/visualstudio/msbuild/errors/msb3821?view=vs-2022
