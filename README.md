@@ -12,7 +12,8 @@ Changes comparing to previous version:
 
 
 Compilation:
-The program should be started as a 64bits and Release. The Debug can be also run but before that, all the file from Release should be cpied to the Debug directory.
+The solution is set to the Windows 11 but it is possible to complie it for Windows 10 with correct settings.
+The program should be started as a 64bits and Release. The Debug can be also run but before that, all the files from Release should be cpied to the Debug directory. The catalog should be umblocked in Windows and in case of antivirus also in  such software. 
 
 
 - the code is compiled for 64bit version. The Executable directory needs some files:
