@@ -215,7 +215,7 @@ namespace PasiveRadar
                             break;
                         }
 
-                    //Average maps
+                    //Average maps; ups it was slow
                     if (flags.showRadar0)
                         radar_cumulate.Run(dataRadar, PostProc, flags.average);
 
