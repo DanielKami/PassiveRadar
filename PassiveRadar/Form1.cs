@@ -13,6 +13,9 @@ namespace PasiveRadar
 
 
         Flags flags;
+        Flags save_flags1;
+        Flags save_flags2;
+
         Find find;
         Radio[] radio;
         Calculate[] calculate;
@@ -42,11 +45,15 @@ namespace PasiveRadar
 
             //Initialize all flags and values for controls
             flags = new Flags();
+            save_flags1 = new Flags();
+            save_flags2 = new Flags();
+
             flags.ColorThemeTable = new Microsoft.Xna.Framework.Color[Draw.ColorTableSize];
             flags.Read();
             flags.AMDdriver = FindAMD();//Detect AMD video driver
 
-
+            save_flags1 = flags;
+            save_flags2 = flags;
 
             ButtonFreqEqual(); //Set the correct icone and values for frequency
             RadarMode();
@@ -125,6 +132,9 @@ namespace PasiveRadar
             }
 
             #endregion
+
+            RestoreState();
+
 
             #region Events
 
@@ -330,13 +340,13 @@ namespace PasiveRadar
                 radar_cumulate.Init(flags);
                 //uint BufferNegPos = flags.BufferSize + (flags.Negative + flags.Positive) * 2;
                 uint BufferNegPos = flags.BufferSize + (50000 + 50000) * 2;
-              
+
                 dataOutRadio0 = new int[BufferNegPos];
                 dataOutRadio1 = new int[BufferNegPos];
 
                 PostProc = new float[flags.Columns * flags.Rows];
-                
-                ambiguity.Release(flags);  
+
+                ambiguity.Release(flags);
                 ambiguity.Prepare(flags);
                 Regresion.Initiate(flags);
             }
@@ -358,7 +368,7 @@ namespace PasiveRadar
                 radarControl1.ActiveDeactivateColumnsControll(false);
                 //init buffers just in case
                 InitBuffers();
- 
+
                 if (CheckTheCorrelationRadarRate())
                 {
                     runing = true;
@@ -665,7 +675,7 @@ namespace PasiveRadar
         /// <param name="LocalFlags"></param>
         private void RadarSettings(Flags LocalFlags)
         {
-           // lock (LockMem)
+            // lock (LockMem)
             {
                 flags.PasiveGain = LocalFlags.PasiveGain;
                 flags.remove_symetrics = LocalFlags.remove_symetrics;
@@ -687,7 +697,7 @@ namespace PasiveRadar
                     if (flags.BufferSize != LocalFlags.BufferSize ||
                         flags.Columns != LocalFlags.Columns ||
                         flags.Rows != LocalFlags.Rows ||
-                        flags.TwoDonglesMode != LocalFlags.TwoDonglesMode ||                        
+                        flags.TwoDonglesMode != LocalFlags.TwoDonglesMode ||
                         flags.NrCorrectionPoints != LocalFlags.NrCorrectionPoints
                         )
                     {
@@ -725,7 +735,7 @@ namespace PasiveRadar
 
                         flags.Columns = LocalFlags.Columns;
                         flags.Rows = LocalFlags.Rows;
-                        flags.DopplerZoom = LocalFlags.DopplerZoom;           
+                        flags.DopplerZoom = LocalFlags.DopplerZoom;
                         flags.TwoDonglesMode = LocalFlags.TwoDonglesMode;
                         flags.NrCorrectionPoints = LocalFlags.NrCorrectionPoints;
                         flags.scale_type = LocalFlags.scale_type;
@@ -1113,9 +1123,37 @@ namespace PasiveRadar
             resizing = true;
         }
 
+        private void buttonSetSettings1_Click(object sender, EventArgs e)
+        {
+            save_flags1 = flags;
+        }
+
+        private void buttonSetSettings2_Click(object sender, EventArgs e)
+        {
+            save_flags2 = flags;
+        }
+
+        private void buttonSettings1_Click(object sender, EventArgs e)
+        {
+            flags = save_flags1;
+            if (FlagsDelegate != null)
+                FlagsDelegate(flags);
+        }
+
+        private void buttonSettings2_Click(object sender, EventArgs e)
+        {
+            flags = save_flags2;
+            // UpdateFrequencies(flags.LastActiveWindowRadio);
+            if (FlagsDelegate != null)
+                FlagsDelegate(flags);
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
-            RestoreState();
+            label2.Text = Flags.version;
+            UpdateFrequencies(flags.LastActiveWindowRadio);
+            if (FlagsDelegate != null)
+                FlagsDelegate(flags);
         }
 
         private void Form1_Shown(object sender, EventArgs e)

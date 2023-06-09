@@ -51,6 +51,10 @@
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.label51 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.buttonSetSettings2 = new System.Windows.Forms.Button();
+            this.buttonSettings2 = new System.Windows.Forms.Button();
+            this.buttonSetSettings1 = new System.Windows.Forms.Button();
+            this.buttonSettings1 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
@@ -349,6 +353,10 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.buttonSetSettings2);
+            this.groupBox1.Controls.Add(this.buttonSettings2);
+            this.groupBox1.Controls.Add(this.buttonSetSettings1);
+            this.groupBox1.Controls.Add(this.buttonSettings1);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.button2);
@@ -364,6 +372,46 @@
             this.groupBox1.Size = new System.Drawing.Size(1355, 71);
             this.groupBox1.TabIndex = 33;
             this.groupBox1.TabStop = false;
+            // 
+            // buttonSetSettings2
+            // 
+            this.buttonSetSettings2.Location = new System.Drawing.Point(989, 44);
+            this.buttonSetSettings2.Name = "buttonSetSettings2";
+            this.buttonSetSettings2.Size = new System.Drawing.Size(74, 27);
+            this.buttonSetSettings2.TabIndex = 102;
+            this.buttonSetSettings2.Text = "Set 2";
+            this.buttonSetSettings2.UseVisualStyleBackColor = true;
+            this.buttonSetSettings2.Click += new System.EventHandler(this.buttonSetSettings2_Click);
+            // 
+            // buttonSettings2
+            // 
+            this.buttonSettings2.Location = new System.Drawing.Point(989, 11);
+            this.buttonSettings2.Name = "buttonSettings2";
+            this.buttonSettings2.Size = new System.Drawing.Size(74, 27);
+            this.buttonSettings2.TabIndex = 101;
+            this.buttonSettings2.Text = "Restore 2";
+            this.buttonSettings2.UseVisualStyleBackColor = true;
+            this.buttonSettings2.Click += new System.EventHandler(this.buttonSettings2_Click);
+            // 
+            // buttonSetSettings1
+            // 
+            this.buttonSetSettings1.Location = new System.Drawing.Point(903, 44);
+            this.buttonSetSettings1.Name = "buttonSetSettings1";
+            this.buttonSetSettings1.Size = new System.Drawing.Size(80, 27);
+            this.buttonSetSettings1.TabIndex = 100;
+            this.buttonSetSettings1.Text = "Set 1";
+            this.buttonSetSettings1.UseVisualStyleBackColor = true;
+            this.buttonSetSettings1.Click += new System.EventHandler(this.buttonSetSettings1_Click);
+            // 
+            // buttonSettings1
+            // 
+            this.buttonSettings1.Location = new System.Drawing.Point(903, 12);
+            this.buttonSettings1.Name = "buttonSettings1";
+            this.buttonSettings1.Size = new System.Drawing.Size(80, 27);
+            this.buttonSettings1.TabIndex = 99;
+            this.buttonSettings1.Text = "Restore 1";
+            this.buttonSettings1.UseVisualStyleBackColor = true;
+            this.buttonSettings1.Click += new System.EventHandler(this.buttonSettings1_Click);
             // 
             // label3
             // 
@@ -399,7 +447,8 @@
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1301, 0);
+            this.label2.ForeColor = System.Drawing.Color.Crimson;
+            this.label2.Location = new System.Drawing.Point(1303, 0);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(44, 16);
@@ -519,6 +568,10 @@
         private System.Windows.Forms.Panel panelViewport2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button buttonSetSettings2;
+        private System.Windows.Forms.Button buttonSettings2;
+        private System.Windows.Forms.Button buttonSetSettings1;
+        private System.Windows.Forms.Button buttonSettings1;
     }
 }
 

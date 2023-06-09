@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace PasiveRadar
 {
@@ -41,19 +43,19 @@ namespace PasiveRadar
             LocalFlags.alpha = flags.alpha;
             LocalFlags.MaxAverage = flags.MaxAverage; //has to be the same as arrays size
             LocalFlags.FreezeBackground = flags.FreezeBackground; //has to be the same as arrays size
-            
+
 
 
             trackBar4.Maximum = (int)LocalFlags.MaxAverage;
 
-            if (LocalFlags.BufferSize == 1024 * 32) comboBox1.SelectedIndex = 0;
-            if (LocalFlags.BufferSize == 1024 * 64) comboBox1.SelectedIndex = 1;
-            if (LocalFlags.BufferSize == 1024 * 128) comboBox1.SelectedIndex = 2;
-            if (LocalFlags.BufferSize == 1024 * 256) comboBox1.SelectedIndex = 3;
-            if (LocalFlags.BufferSize == 1024 * 512) comboBox1.SelectedIndex = 4;
-            if (LocalFlags.BufferSize == 1024 * 1024) comboBox1.SelectedIndex = 5;
-            if (LocalFlags.BufferSize == 1024 * 2048) comboBox1.SelectedIndex = 6;
-            if (LocalFlags.BufferSize == 1024 * 4096) comboBox1.SelectedIndex = 7;
+            //if (LocalFlags.BufferSize == 1024 * 32) comboBox1.SelectedIndex = 0;
+            //if (LocalFlags.BufferSize == 1024 * 64) comboBox1.SelectedIndex = 1;
+            //if (LocalFlags.BufferSize == 1024 * 128) comboBox1.SelectedIndex = 2;
+            if (LocalFlags.BufferSize == 1024 * 256) comboBox1.SelectedIndex = 0;
+            if (LocalFlags.BufferSize == 1024 * 512) comboBox1.SelectedIndex = 1;
+            if (LocalFlags.BufferSize == 1024 * 1024) comboBox1.SelectedIndex = 2;
+            if (LocalFlags.BufferSize == 1024 * 2048) comboBox1.SelectedIndex = 3;
+            if (LocalFlags.BufferSize == 1024 * 4096) comboBox1.SelectedIndex = 4;
 
             trackBar2.Value = (int)(LocalFlags.PasiveGain * 10);
             trackBar3.Value = (int)LocalFlags.DopplerZoom;
@@ -92,6 +94,8 @@ namespace PasiveRadar
             }
             else
                 checkBox1.Enabled = true;
+            //Memory protection
+            MaxMemory();
 
             //Set active inactive controls
             SetActiveInactiveControls(LocalFlags);
@@ -101,7 +105,7 @@ namespace PasiveRadar
 
         public void ActiveDeactivateColumnsControll(bool state)
         {
-           // trackBar1.Enabled = state;
+            // trackBar1.Enabled = state;
         }
         private void SetActiveInactiveControls(Flags LocalFlags)
         {
@@ -113,19 +117,83 @@ namespace PasiveRadar
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
 
-            if (comboBox1.SelectedIndex == 0) BufferSize = 1024 * 32;
-            if (comboBox1.SelectedIndex == 1) BufferSize = 1024 * 64;
-            if (comboBox1.SelectedIndex == 2) BufferSize = 1024 * 128;
-            if (comboBox1.SelectedIndex == 3) BufferSize = 1024 * 256;
-            if (comboBox1.SelectedIndex == 4) BufferSize = 1024 * 512;
-            if (comboBox1.SelectedIndex == 5) BufferSize = 1024 * 1024;
-            if (comboBox1.SelectedIndex == 6) BufferSize = 1024 * 2048;
-            if (comboBox1.SelectedIndex == 7) BufferSize = 1024 * 4096;
+            //if (comboBox1.SelectedIndex == 0) BufferSize = 1024 * 32;
+            //if (comboBox1.SelectedIndex == 1) BufferSize = 1024 * 64;
+            //if (comboBox1.SelectedIndex == 2) BufferSize = 1024 * 128;
+            if (comboBox1.SelectedIndex == 0) BufferSize = 1024 * 256;
+            if (comboBox1.SelectedIndex == 1) BufferSize = 1024 * 512;
+            if (comboBox1.SelectedIndex == 2) BufferSize = 1024 * 1024;
+            if (comboBox1.SelectedIndex == 3) BufferSize = 1024 * 2048;
+            if (comboBox1.SelectedIndex == 4) BufferSize = 1024 * 4096;
+
+
+
             SendSettings();
         }
 
+
+        void MaxMemory()
+        {
+            ulong d = BufferSize * (uint)trackBar1.Value;
+            label25.Text = "" + d;
+
+            if (d > 1024L * 1024 * 400) //512
+                label25.ForeColor = System.Drawing.Color.Yellow;
+            else
+                label25.ForeColor = System.Drawing.Color.Green;
+
+            if (d > 1024L * 1024 * 512) //512
+                label25.ForeColor = System.Drawing.Color.Red;
+
+
+            if (comboBox1.SelectedIndex == 3)
+            {
+                if (trackBar1.Value > 255)
+                {
+                    trackBar1.Value = 255;
+                    trackBar1.Maximum = 256;
+                }
+                if (trackBar5.Value > 2500)
+                {
+                    trackBar5.Value = 2500;
+                    trackBar5.Maximum = 2501;
+                }
+            }
+            else if (comboBox1.SelectedIndex == 4)
+            {
+                if (trackBar1.Value > 140)
+                {
+                    trackBar1.Value = 140;
+                    trackBar1.Maximum = 141;
+                }
+                if (trackBar5.Value > 1000)
+                {
+                    trackBar5.Value = 1000;
+                    trackBar5.Maximum = 1001;                   
+                }
+ 
+            }
+            else
+            {
+                trackBar1.Maximum = 512;
+                trackBar5.Maximum = 4000;
+            }
+
+            trackBar1.Update();
+            trackBar5.Update();
+            trackBar1.Refresh();
+            trackBar5.Refresh();
+
+            int milliseconds = 100;
+            Thread.Sleep(milliseconds);
+
+
+        }
         void SendSettings()
         {
+
+            MaxMemory();
+
             if (!SET) return;
 
             Flags LocalFlags = new Flags();
@@ -145,7 +213,7 @@ namespace PasiveRadar
             LocalFlags.alpha = (byte)trackBar_alpha.Value;
             LocalFlags.FreezeBackground = checkBoxFreeze.Checked;
 
-             
+
             label1.Text = "" + LocalFlags.PasiveGain;
             label2.Text = "" + LocalFlags.DopplerZoom;
             label7.Text = "" + LocalFlags.average;
@@ -157,8 +225,6 @@ namespace PasiveRadar
 
             LocalFlags.Columns = (uint)trackBar1.Value;
 
-
-            // trackBar5.Minimum = (int)LocalFlags.Columns;
             LocalFlags.Rows = (uint)trackBar5.Value;
 
             label11.Text = "" + LocalFlags.Columns;
@@ -225,7 +291,7 @@ namespace PasiveRadar
             if (trackBar6.Value > trackBar1.Value - 1)
                 trackBar6.Value = trackBar6.Maximum;
             else
-                trackBar6.Value =temp_6value ;
+                trackBar6.Value = temp_6value;
 
 
 
