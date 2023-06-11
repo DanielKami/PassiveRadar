@@ -9,6 +9,7 @@ namespace PasiveRadar
 {
     public class Flags
     {
+        public const string version = "v. 1.51";
         public const uint MAX_DONGLES = 2;
         public const uint MAX_DEVICE_NAME = 256;  //number of characters dedicated to the name of CUDA device
 

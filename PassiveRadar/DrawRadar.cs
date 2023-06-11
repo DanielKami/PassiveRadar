@@ -69,6 +69,7 @@ namespace PasiveRadar
 
         public void DrawPrepare(Panel panelViewport, Flags flags = null)
         {
+             
             lock (LockRadar)
             {
                 if (flags != null)
@@ -98,7 +99,8 @@ namespace PasiveRadar
                 x_step = ActivePlotAreaX / x_ticks;
 
                 // This is the Doppler shift change between ticks according to Max Manning dopplerfish.com
-                r_b_c = (float)(sample_rate / Columns / ActivePlotAreaX / (doppler_zoom/100) * c / frequency / 4.0f); // TODO: / doppler_zoom;
+                r_b_c = (float)(sample_rate * Columns / ActivePlotAreaX / (doppler_zoom) * c / frequency / 100f); // TODO: / doppler_zoom; is in m/s
+                r_b_c *= 3600 / 1000;
                 ColRow = Columns * Rows;
 
                 p = new Vector2[ColRow];
@@ -125,17 +127,16 @@ namespace PasiveRadar
                 // Scale Y
                 Up = ActivePlotAreaY;
                 step_y = ActivePlotAreaY / y_ticks;
-                float row_to_km = c / 1000 / sample_rate/2;//divided by 2 because the signal is in format real bit + imaginary part bit
+                float row_to_km = c / 10000 / sample_rate/2;//divided by 2 because the signal is in format real bit + imaginary part bit
                 Yscale_shift = DistanceShift * row_to_km;
 
                 scaleYfactor = row_to_km / zoomY;
-
             }
-
         }
 
         public void Scene(Panel panelViewport, float[] data, bool DrawScale)
         {
+            
             //Calculate frames per second
             frames++;
             if (watch.ElapsedMilliseconds >= 1000L)
@@ -168,11 +169,11 @@ namespace PasiveRadar
                 this.spriteBatch.Draw(texture, new Rectangle(0, y_bottom, panelViewport.Width, 1), Color.White);
                 string drawString;
 
-                spriteBatch.DrawString(spriteFont, "Doppler speed (m/s)", new Vector2(panelViewport.Width / 2 - 30, panelViewport.Height - 15), Color.White, 0, new Vector2(0, 0), 0.27f, SpriteEffects.None, 0);
+                spriteBatch.DrawString(spriteFont, "Doppler speed (km/h)", new Vector2(panelViewport.Width / 2 - 30, panelViewport.Height - 15), Color.White, 0, new Vector2(0, 0), 0.27f, SpriteEffects.None, 0);
                 spriteBatch.DrawString(spriteFont, "Radar", new Vector2(panelViewport.Width - 50, 1), graphisc.white, 0, new Vector2(0, 0), 0.3f, SpriteEffects.None, 0);
 
                 //Additional info frames/sec
-                drawString = "" + frames_per_sec + " fps   " + Rows + "x" + Columns + "    Device: " + DeviceName;
+                drawString = "                  " + frames_per_sec + " fps   " + Rows + "x" + Columns + "    Device: " + DeviceName;
                 spriteBatch.DrawString(spriteFont, drawString, new Vector2(1 + LeftMargin, 0), graphisc.white, 0, new Vector2(0, 0), 0.3f, SpriteEffects.None, 0);
 
 
@@ -190,6 +191,9 @@ namespace PasiveRadar
         {
             float x = 5, y;
             string drawString;
+
+            spriteBatch.DrawString(spriteFont, "Distance (km)", new Vector2(0,  1), Color.White, 0, new Vector2(0, 0), 0.27f, SpriteEffects.None, 0);
+
             for (float i = step_y; i < Up; i += step_y)
             {
 

@@ -44,22 +44,14 @@ namespace PasiveRadar
                  CumulateBuffer[CCR + i] = data[i];
              });
 
-            //for (uint i = 0; i < Frame; i++)
-            //    CumulateBuffer[CCR + i] = data[i];
+ 
 
             //Averaging
             float one_ave = 1.0f / average;
 
             //Clera the output
             System.Array.Clear(PostProc, 0, (int)Frame);
-
-            //for (uint j = 0; j < average; j++)
-            //{
-            //    long jF = j * Frame;
-            //    for (uint i = 0; i < Frame; i++)
-            //        PostProc[i] += CumulateBuffer[i + jF];
-            //}
-
+ 
             Parallel.For(0, average,
               j =>
               {
@@ -76,7 +68,7 @@ namespace PasiveRadar
             //for (uint i = 0; i < Frame; i++)
             //    PostProc[i] *= one_ave; //255 is for graphics normalisation
 
-            Parallel.For(0, average,
+            Parallel.For(0, Frame,
             i =>
             {
                 PostProc[i] *= one_ave;

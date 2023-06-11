@@ -67,7 +67,7 @@ namespace PasiveRadar
             if (thread_calculate_radar == null)
             {
                 thread_calculate_radar = new Thread(new ThreadStart(CalculateRadarScene));
-                thread_calculate_radar.Priority = System.Threading.ThreadPriority.Normal;
+                thread_calculate_radar.Priority = System.Threading.ThreadPriority.AboveNormal;
                 thread_calculate_radar.Start();
             }
         }
@@ -189,6 +189,9 @@ namespace PasiveRadar
                         if (radio[0] != null)
                             for (int i = 0; i < flags.BufferSize; i++)
                                 dataOutRadio0[i] = radio[0].dataIQ[i] - 128;
+                        else if (radio[1] != null)
+                            for (int i = 0; i < flags.BufferSize; i++)
+                                dataOutRadio0[i] = radio[1].dataIQ[i] - 128;
 
                         if (radio[1] != null & flags.TwoDonglesMode)
                             for (int i = 0; i < flags.BufferSize; i++)

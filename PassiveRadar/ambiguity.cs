@@ -49,7 +49,7 @@ namespace PasiveRadar
             if (ThreadGPU != null)
             {
                 ThreadGPU.Name = "Thread GPU";
-                ThreadGPU.Priority = System.Threading.ThreadPriority.Normal;
+                ThreadGPU.Priority = System.Threading.ThreadPriority.AboveNormal;
                 ThreadGPU.Start();
             }
         }
@@ -67,7 +67,7 @@ namespace PasiveRadar
         {
             //flags.Columns * flags.rows + flags.Columns;
             //The size can be different than dellared in buffer prepare, so it is better to set it constant
-            var dataRadar = new float[1000 * 1000 + 1000];
+            var dataRadar = new float[4000 * 1000 + 1000];
 
             try
             {
